@@ -1,0 +1,4 @@
+# A4 — Full model (HuWie-Net + PINN + DINOv2)
+variant: A4
+use_pinn: true
+use_dino: true

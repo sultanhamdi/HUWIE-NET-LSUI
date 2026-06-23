@@ -1,0 +1,58 @@
+# Shared defaults for every ablation variant.
+# Per-variant files (A1-A4) override only use_pinn / use_dino — nothing else,
+# so the ablation is fair (identical training budget across variants).
+
+seed: 42
+
+paths:
+  data_root:  ./data
+  lsui_raw:   ./data/lsui/input
+  lsui_ref:   ./data/lsui/GT
+  uieb_raw:   ./data/uieb/raw
+  uieb_ref:   ./data/uieb/ref
+  pretrained: ./data/pretrained/HUWIE_Net_epoch50.pth
+  cache:      ./data/cache
+  outputs:    ./outputs
+
+# Asset sources — used by download.py only.
+assets:
+  kaggle:
+    lsui:     cbhavik/lsui-dataset
+    uieb_raw: larjeck/uieb-dataset-raw
+    uieb_ref: larjeck/uieb-dataset-reference
+  pretrained_url:      "https://github.com/UIE-Lab/HUWIE-Net/raw/main/pre_trained_models/HUWIE_Net_epoch50.pth"
+  pretrained_filename: HUWIE_Net_epoch50.pth
+
+# HuWie-Net has no configurable width / block nums — it's a fixed architecture.
+# This section is kept for compatibility but only use_pinn matters for build_model.
+model: {}
+
+train:
+  num_epochs: 50           # identical for all variants (fairness)
+  batch_size: 16
+  accum_steps: 1
+  patch_size: 256
+  lr: 1.0e-3               # HuWie-Net original uses 1e-3
+  pinn_lr: 5.0e-3          # PINN branch LR (random init, needs ~5x higher)
+  weight_decay: 1.0e-4
+  betas: [0.9, 0.999]
+  warmup_epochs: 3
+  min_lr: 1.0e-6
+  grad_clip: 1.0
+  ema_decay: 0.9999
+  freeze_encoder_epochs: 2 # soft warmup: keep I2IM+PIM frozen early so the random
+                           #   PINN head doesn't corrupt pretrained features
+  phys_warmup_epochs: 5    # ramp L_phys 0 -> full; protects pretrained features
+  num_workers: 4           # Kaggle typically has 2-4 CPU cores
+  compile: false
+
+loss:
+  w_char: 1.0
+  w_phys: 0.1
+  w_percep: 0.05
+
+eval:
+  num_samples: 8           # qualitative grids saved per variant
+  use_tta: true
+  save_every: 5            # checkpoint cadence (epochs)
+  eval_every: 5            # validation cadence (epochs)

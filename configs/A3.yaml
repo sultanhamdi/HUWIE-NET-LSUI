@@ -1,0 +1,4 @@
+# A3 — HuWie-Net + DINOv2 perceptual loss (no physics)
+variant: A3
+use_pinn: false
+use_dino: true

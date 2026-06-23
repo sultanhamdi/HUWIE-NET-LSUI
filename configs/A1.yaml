@@ -1,0 +1,4 @@
+# A1 — HuWie-Net only (backbone baseline, Charbonnier loss)
+variant: A1
+use_pinn: false
+use_dino: false

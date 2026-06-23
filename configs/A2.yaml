@@ -1,0 +1,4 @@
+# A2 — HuWie-Net + PINN (Beer-Lambert physics branch)
+variant: A2
+use_pinn: true
+use_dino: false
