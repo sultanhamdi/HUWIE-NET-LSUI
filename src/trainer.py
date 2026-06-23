@@ -251,6 +251,12 @@ def run_training(cfg, smoke=False):
     # best.pt keep clean keys (no _orig_mod prefix); compiled wrapper shares the same params.
     fwd = torch.compile(model) if tr.get("compile", False) else model
 
+    if torch.cuda.device_count() > 1:
+        print(f"[gpu] Using {torch.cuda.device_count()} GPUs (DataParallel)!")
+        fwd = nn.DataParallel(fwd)
+        if dino_fn:
+            dino_fn = nn.DataParallel(dino_fn)
+
     # Differential LR: PINN is random-init so it needs a higher LR than the pretrained backbone.
     pinn_ids = {id(p) for p in (model.pinn.parameters() if model.pinn else [])}
     backbone_params = [p for p in model.parameters() if id(p) not in pinn_ids]

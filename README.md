@@ -157,7 +157,7 @@ Cara termudah: upload kode ke GitHub, lalu di Kaggle Notebook:
 !python download.py
 
 # Cell 4: Training
-!python train.py --variant A4
+!python train.py --all
 
 # Cell 5: Evaluate
 !python evaluate.py --all
