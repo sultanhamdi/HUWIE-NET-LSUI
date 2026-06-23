@@ -147,8 +147,8 @@ Cara termudah: upload kode ke GitHub, lalu di Kaggle Notebook:
 
 ```python
 # Cell 1: Clone repo
-!git clone https://github.com/<username>/huwienet.git
-%cd huwienet/modal
+!git clone https://github.com/sultanhamdi/HUWIE-NET-LSUI.git
+%cd HUWIE-NET-LSUI
 
 # Cell 2: Install deps
 !pip install -q einops lpips torchmetrics
@@ -244,7 +244,7 @@ Jalankan ulang perintah yang sama — training lanjut dari checkpoint terakhir.
 ## Struktur kode (referensi)
 
 ```
-modal/
+HUWIE-NET-LSUI/
 ├── README.md
 ├── download.py           ← python download.py
 ├── train.py              ← python train.py --variant A1|A2|A3|A4|--all
