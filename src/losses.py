@@ -61,22 +61,22 @@ def compute_loss(inp, out, gt, t, dino_fn, w_char, w_phys, w_percep, phys_scale=
     """Return (total, dict of components). t/dino_fn may be None (ablation toggles).
     phys_scale ramps the physics term during warmup.
     """
-    char = charbonnier_loss(out, gt)
+    char = charbonnier_loss(out, gt).mean()
     total = w_char * char
     comps = {"char": char.detach()}
 
     if t is not None:
-        phys = physics_consistency_loss(inp, out, t)
+        phys = physics_consistency_loss(inp, out, t).mean()
         total = total + (w_phys * phys_scale) * phys
         comps["phys"] = phys.detach()
     else:
         comps["phys"] = torch.zeros((), device=inp.device)
 
     if dino_fn is not None:
-        percep = dino_fn(out, gt)
+        percep = dino_fn(out, gt).mean()  # DataParallel returns vector of scalars
         total = total + w_percep * percep
         comps["percep"] = percep.detach()
     else:
         comps["percep"] = torch.zeros((), device=inp.device)
 
-    return total, comps
+    return total.mean(), comps
