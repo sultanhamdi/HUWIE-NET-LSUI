@@ -388,7 +388,7 @@ def run_training(cfg, smoke=False):
         if do_val:
             msg += f"  val_psnr={vp} val_ssim={vs}" + ("  <<BEST" if vp and float(vp) >= best else "")
         if torch.cuda.is_available():
-            msg += f"  vram={torch.cuda.max_memory_allocated()/1e9:.1f}/{torch.cuda.get_device_properties(0).total_mem/1e9:.0f}GB"
+            msg += f"  vram={torch.cuda.max_memory_allocated()/1e9:.1f}/{torch.cuda.get_device_properties(0).total_memory/1e9:.0f}GB"
         print(msg)
 
         if ((epoch + 1) % cfg["eval"]["save_every"] == 0) or (epoch + 1 == num_epochs):
